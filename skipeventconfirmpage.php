@@ -156,6 +156,39 @@ function skipeventconfirmpage_civicrm_buildForm($formName, &$form) {
       );
     }
   }
+
+  if (in_array($formName, ['CRM_Event_Form_Registration_Register', 'CRM_Event_Form_Registration_AdditionalParticipant'])) {
+    if ($form->_values['event']['is_monetary'] && !$form->_values['event']['is_confirm_enabled']) {
+      $changeButtonTitle = FALSE;
+      switch ($formName) {
+        case 'CRM_Event_Form_Registration_Register':
+          $changeButtonTitle = TRUE;
+          break;
+
+        case 'CRM_Event_Form_Registration_AdditionalParticipant':
+          $params = $form->getVar('_params');
+          if (!empty($params[0]['additional_participants'])
+            && str_replace('Participant_', '', $form->getVar('_name')) == $params[0]['additional_participants']
+          ) {
+            $changeButtonTitle = TRUE;
+          }
+          break;
+      }
+      if ($changeButtonTitle) {
+        $buttons = &$form->getElement('buttons');
+        foreach ($buttons->_elements as &$button) {
+          if ($button->_type == 'submit'
+            && in_array(strtolower($button->_attributes['value']), [
+            'review your registration',
+            'continue',
+          ])) {
+            $button->_attributes['value'] = ts('Submit Registration');
+            break;
+          }
+        }
+      }
+    }
+  }
 }
 
 /**
