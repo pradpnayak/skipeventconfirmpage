@@ -177,12 +177,8 @@ function skipeventconfirmpage_civicrm_buildForm($formName, &$form) {
       if ($changeButtonTitle) {
         $buttons = &$form->getElement('buttons');
         foreach ($buttons->_elements as &$button) {
-          if ($button->_type == 'submit'
-            && in_array(strtolower($button->_attributes['value']), [
-            'review your registration',
-            'continue',
-          ])) {
-            $button->_attributes['value'] = ts('Submit Registration');
+          if ($button->_attributes['type'] == 'submit' && $button->_attributes['name'] == '_qf_Register_upload') {
+            $button->_content = '<i aria-hidden="true" class="crm-i fa-chevron-right"></i> ' . ts('Register');
             break;
           }
         }
