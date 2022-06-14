@@ -154,6 +154,8 @@ function skipeventconfirmpage_civicrm_buildForm($formName, &$form) {
         ts('Use a confirmation screen?'), NULL, NULL,
         ['onclick' => "return showHideByValue('is_confirm_enabled','','confirm_screen_settings','block','radio',false);"]
       );
+      // The description wording doesn't make sense now, but it's hardcoded in the template. It doesn't really add any useful info so get rid of it.
+      \Civi::resources()->addScript('CRM.$("tr.crm-event-manage-registration-form-block-is_confirm_enabled div.description").text("");');
     }
   }
 
